@@ -1,1 +1,1 @@
-# OC6
+Pour l’API, un fichier introductif permettant de comprendre l'objectif du projet et le découpage des dossiers, et un fichier listant les packages utilisés seront présents dans le dossier
