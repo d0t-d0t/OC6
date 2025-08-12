@@ -5,7 +5,7 @@ nltk
 pandas
 pydantic
 
-sklearn
+scikit-learn
 tensorflow
 keras
 mlflow
