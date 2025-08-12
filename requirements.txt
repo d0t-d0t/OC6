@@ -6,6 +6,6 @@ pandas
 pydantic
 
 scikit-learn
-tensorflow
+
 keras
 mlflow

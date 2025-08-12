@@ -8,7 +8,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.models import Sequential # from tf_keras import Sequential
 from keras.layers import Dense, Embedding, Flatten, LSTM
 from keras.saving import register_keras_serializable
-import tensorflow as tf
+
 from .Preproc import tokenize_and_preprocess
 
 @register_keras_serializable()
@@ -97,6 +97,10 @@ class TweetClassifierPipeline(mlflow.pyfunc.PythonModel,
         self.vectorizer_func = vectorizer_func
         self.vectorizer_params = vectorizer_params
         self.model_lib = model_lib
+
+        if self.model_lib=='KERAS':
+            import tensorflow as tf
+
         self.model_func = model_func
         self.model_params = model_params
         self.vector_lib = vector_lib
@@ -118,6 +122,7 @@ class TweetClassifierPipeline(mlflow.pyfunc.PythonModel,
 
         match self.model_lib:
             case "KERAS":
+                import tensorflow as tf
                 if not self.model_params.get('vocabulary'):
                     '''Need to adapt vector layer vocabulary too'''
                     tokenized,word_frequ_df = self.preproc_func(X,                              
@@ -218,6 +223,7 @@ class TweetClassifierPipeline(mlflow.pyfunc.PythonModel,
             X = self.vectorize_transform(X)
         
         if self.model_lib == 'KERAS':
+            import tensorflow as tf
             X = tf.constant(X)
 
         prediction = self.model_.predict(X)
