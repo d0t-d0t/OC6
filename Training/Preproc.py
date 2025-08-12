@@ -1,48 +1,48 @@
 from collections import Counter
-from sklearn.feature_extraction.text import CountVectorizer
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
+# from sklearn.feature_extraction.text import CountVectorizer
+# from wordcloud import WordCloud
+# import matplotlib.pyplot as plt
 import nltk
 import pandas as pd
 from nltk.corpus import stopwords
-import tensorflow as tf
+# import tensorflow as tf
 # nltk english lemmatization
 from nltk.stem import WordNetLemmatizer
 nltk.download('wordnet')
 nltk.download('stopwords')
 
-def observ_token(df, 
-                 token_column='tokenised_desc'
-                 ):
+# def observ_token(df, 
+#                  token_column='tokenised_desc'
+#                  ):
 
 
-    word_freq_df = get_word_frequency(df,token_column)
+#     word_freq_df = get_word_frequency(df,token_column)
 
-    # plt.figure(figsize=(10, 6))
-    # sns.histplot(data=word_freq_df.head(50), y='Word',x='Frequency',palette="hls",
-    #             multiple="stack",
-    #             log_scale=True
-    #             )
-    # plt.title(f'Visualisation des stop words')
-    # plt.show()
-    word_freq_df.head(50).plot(x='Word', y='Frequency', kind='bar',figsize=(8,4))
-    word_freq_df.tail(50).plot(x='Word', y='Frequency', kind='bar',figsize=(8,4))
+#     # plt.figure(figsize=(10, 6))
+#     # sns.histplot(data=word_freq_df.head(50), y='Word',x='Frequency',palette="hls",
+#     #             multiple="stack",
+#     #             log_scale=True
+#     #             )
+#     # plt.title(f'Visualisation des stop words')
+#     # plt.show()
+#     word_freq_df.head(50).plot(x='Word', y='Frequency', kind='bar',figsize=(8,4))
+#     word_freq_df.tail(50).plot(x='Word', y='Frequency', kind='bar',figsize=(8,4))
 
-    word_dict = pd.Series(word_freq_df.Frequency.values,index=word_freq_df.Word).to_dict()
-    wordcloud = WordCloud(
-        width=600,
-        height=300,
-        max_words=100,
-        colormap='viridis',
-        background_color='white',
-        stopwords={'the', 'and', 'is', 'in', 'that', 'of', 'it'}
-    ).generate_from_frequencies(word_dict)
+#     word_dict = pd.Series(word_freq_df.Frequency.values,index=word_freq_df.Word).to_dict()
+#     wordcloud = WordCloud(
+#         width=600,
+#         height=300,
+#         max_words=100,
+#         colormap='viridis',
+#         background_color='white',
+#         stopwords={'the', 'and', 'is', 'in', 'that', 'of', 'it'}
+#     ).generate_from_frequencies(word_dict)
 
-    plt.figure(figsize=(8, 4))
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis('off')
-    plt.show()
-    return word_freq_df
+#     plt.figure(figsize=(8, 4))
+#     plt.imshow(wordcloud, interpolation='bilinear')
+#     plt.axis('off')
+#     plt.show()
+#     return word_freq_df
 
 
 def get_word_frequency(df, token_column):
@@ -205,9 +205,9 @@ def tokenize_and_preprocess(df, text_column=None,
                 df[cible] = remove_words_from_tokens(df,current_cible,
                                 stop_words = to_small_words )
                 
-            case 'KERAS_FORMAT':
-                ''' need to return tf.constant in a shape [["foo qux bar"], ["qux baz"]] '''
-                return tf.constant(df[current_cible].tolist())
+            # case 'KERAS_FORMAT':
+            #     ''' need to return tf.constant in a shape [["foo qux bar"], ["qux baz"]] '''
+            #     return tf.constant(df[current_cible].tolist())
                  
                 
         if print_sample>0:

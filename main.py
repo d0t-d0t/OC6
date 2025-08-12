@@ -1,8 +1,5 @@
 from fastapi import FastAPI, HTTPException
 import pickle
-from typing import List
-
-import requests
 from Training.TweetClassifier import TweetClassifierPipeline
 from Deployment.TweetModel import Tweet
 
@@ -43,9 +40,9 @@ def get_prediction(tweet: Tweet):
         "probabilitie": float(probability[0]),
     }
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="localhost", port=8000)
+# if __name__ == "__main__":
+    # import uvicorn
+    # uvicorn.run(app, host="localhost", port=8000)
 
     # data = {"tweet": str('test')}
     

@@ -1,0 +1,12 @@
+gunicorn
+
+fastapi
+pickle
+nltk
+pandas
+pydantic
+
+sklearn
+tensorflow
+keras
+mlflow
