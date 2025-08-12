@@ -17,6 +17,8 @@ latest_model = pickle.load(latest_model_in)
 def read_root():
     return {"Hello": "World"}
 
+
+
 @app.post("/predict/")
 def get_prediction(tweet: Tweet):
     # tweet = Tweet(tweet_dic)
