@@ -2,14 +2,12 @@ from fastapi import FastAPI, HTTPException
 import pickle
 from Training.TweetClassifier import TweetClassifierPipeline
 from Deployment.TweetModel import Tweet
-
-
-
-
+import os
 
 app = FastAPI()
 
-model_path = r'.\Deployment\Models\model_tfidf.pkl'
+# model_path = r'.\Deployment\Models\model_tfidf.pkl'
+model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
 latest_model_in = open(model_path, "rb")
 latest_model = pickle.load(latest_model_in)
 
@@ -43,8 +41,8 @@ def get_prediction(tweet: Tweet):
     }
 
 # if __name__ == "__main__":
-    # import uvicorn
-    # uvicorn.run(app, host="localhost", port=8000)
+#     import uvicorn
+#     uvicorn.run(app, host="localhost", port=8000)
 
     # data = {"tweet": str('test')}
     
