@@ -4,7 +4,7 @@ import streamlit as st
 from Deployment.TweetModel import Tweet
 import json
 
-API_ENDPOINT = "http://localhost:8000/predict/"
+API_ENDPOINT = "http://localhost:5000/predict/"
 
 def get_prediction(tweet_text):
     data = {"text": f'{tweet_text}'}
@@ -36,14 +36,29 @@ if st.button("Predict"):
 
             # Agreement buttons
             st.write(f"Do you agree with this prediction?")
-            agree = st.button("👍")
-            disagree = st.button("👎")
+            # agree = st.button("👍")
+            # disagree = st.button("👎")
 
-            if disagree:
-                feedback = st.slider("Rate the tweet's sentiment", -1.0, 1.0, 0.0)
+            # 
+            st.session_state[f"feedback"] = None
+            feedback = st.session_state.get("feedback", None)
 
-                if st.button("Submit Feedback"):
-                    st.write(f"Thank you! Your rating: {feedback}")
+            def save_binary_feedback():
+                if st.session_state[f"feedback"]==0:
+                    feedback = st.slider("Rate the tweet's sentiment", 0.0, 0.5, 1.0)
+
+                    if st.button("Submit Feedback"):
+                        st.write(f"Thank you! Your rating: {feedback}")
+
+
+            st.feedback(
+                "thumbs",
+                key=f"feedback",
+                disabled=feedback is not None,
+                on_change=save_binary_feedback,
+                args=[],
+            )
+
         except HTTPException as e:
             st.error(f"Error from API: {e.detail}")
     else:

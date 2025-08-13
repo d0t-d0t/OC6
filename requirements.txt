@@ -1,9 +1,11 @@
 gunicorn
 
+flask
 fastapi
 nltk
 pandas
 pydantic
+
 
 scikit-learn
 tensorflow-cpu
