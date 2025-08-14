@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,render_template
 import pickle
 from Training.TweetClassifier import TweetClassifierPipeline
 from Deployment.TweetModel import Tweet
@@ -11,9 +11,10 @@ model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
 latest_model_in = open(model_path, "rb")
 latest_model = pickle.load(latest_model_in)
 
-@app.route("/", methods=["GET"])
-def read_root():
-    return {"Hello": "World"}
+@app.route('/')
+def index():
+   print('Request for index page received')
+   return render_template('index.html')
 
 
 
@@ -42,6 +43,6 @@ def get_prediction():
         "probabilitie": float(probability[0]),
     })
 
-# if __name__ == "__main__":
-    # app.run(debug=True)
 
+if __name__ == '__main__':
+   app.run()
