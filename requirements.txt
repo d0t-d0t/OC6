@@ -1,6 +1,6 @@
 gunicorn
 
-flask
+Flask
 fastapi
 nltk
 pandas
