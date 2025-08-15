@@ -11,3 +11,4 @@ scikit-learn
 tensorflow-cpu
 keras
 mlflow
+protobuf==5.28.3
