@@ -1,15 +1,16 @@
 from fastapi import FastAPI, HTTPException
-import pickle
-from Training.TweetClassifier import TweetClassifierPipeline
-from Deployment.TweetModel import Tweet
-import os
+import uvicorn
+# import pickle
+# from Training.TweetClassifier import TweetClassifierPipeline
+# from Deployment.TweetModel import Tweet
+# import os
 
 app = FastAPI()
 
 # model_path = r'.\Deployment\Models\model_tfidf.pkl'
-model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
-latest_model_in = open(model_path, "rb")
-latest_model = pickle.load(latest_model_in)
+# model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
+# latest_model_in = open(model_path, "rb")
+# latest_model = pickle.load(latest_model_in)
 
 @app.get("/")
 def read_root():
@@ -17,32 +18,32 @@ def read_root():
 
 
 
-@app.post("/predict/")
-def get_prediction(tweet: Tweet):
-    # tweet = Tweet(tweet_dic)
-    predictions = []
-    probabilities = []
+# @app.post("/predict/")
+# def get_prediction(tweet: Tweet):
+#     # tweet = Tweet(tweet_dic)
+#     predictions = []
+#     probabilities = []
 
 
-    prediction = latest_model.predict(tweet.text)
-    try:
-        probability = latest_model.predict_proba(tweet.text)
-        if probability.shape[1] == 2:
-            probability = probability[:, 1]
-    except:
-        probability = None
+#     prediction = latest_model.predict(tweet.text)
+#     try:
+#         probability = latest_model.predict_proba(tweet.text)
+#         if probability.shape[1] == 2:
+#             probability = probability[:, 1]
+#     except:
+#         probability = None
 
 
 
 
-    return {
-        "prediction": int(prediction[0]),
-        "probabilitie": float(probability[0]),
-    }
+#     return {
+#         "prediction": int(prediction[0]),
+#         "probabilitie": float(probability[0]),
+#     }
 
-# if __name__ == "__main__":
-#     import uvicorn
-#     uvicorn.run(app, host="localhost", port=8000)
+if __name__ == "__main__":
+
+    uvicorn.run(app, host="localhost", port=8000)
 
     # data = {"tweet": str('test')}
     
