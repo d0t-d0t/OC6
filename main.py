@@ -12,10 +12,10 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-model_path = r'.\Deployment\Models\model_tfidf.pkl'
-model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
-latest_model_in = open(model_path, "rb")
-latest_model = pickle.load(latest_model_in)
+# model_path = r'.\Deployment\Models\model_tfidf.pkl'
+# model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
+# latest_model_in = open(model_path, "rb")
+# latest_model = pickle.load(latest_model_in)
 
 
 @app.get("/", response_class=HTMLResponse)
