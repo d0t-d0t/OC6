@@ -1,8 +1,11 @@
+fastapi
 gunicorn
 uvicorn
+jinja2
+python-multipart
 
-Flask
-fastapi
+# Flask
+
 # nltk
 # pandas
 # pydantic
@@ -12,4 +15,4 @@ fastapi
 # tensorflow-cpu
 # keras
 # mlflow
-protobuf==5.28.3
+# protobuf==5.28.3
