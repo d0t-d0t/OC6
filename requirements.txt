@@ -6,13 +6,13 @@ python-multipart
 
 # Flask
 
-# nltk
-# pandas
-# pydantic
+nltk
+pandas
+pydantic
 
 
-# scikit-learn
-# tensorflow-cpu
-# keras
-# mlflow
-# protobuf==5.28.3
+scikit-learn
+tensorflow-cpu
+keras
+mlflow
+protobuf==5.28.3
