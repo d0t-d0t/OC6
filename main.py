@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
 import pickle
-from Training.TweetClassifier import TweetClassifierPipeline
+# from Training.TweetClassifier import TweetClassifierPipeline
 from Deployment.TweetModel import Tweet
 import os
 
