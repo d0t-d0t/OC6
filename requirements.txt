@@ -11,8 +11,8 @@ pandas
 pydantic
 
 
-# scikit-learn
+scikit-learn
 # tensorflow-cpu
-# keras
-# mlflow
-# protobuf==5.28.3
+keras
+mlflow
+protobuf==5.28.3
