@@ -4,7 +4,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
 import pickle
-from Training.TweetClassifier import TweetClassifierPipeline
+
+try:
+    from Training.TweetClassifier import TweetClassifierPipeline
+    pipeline = TweetClassifierPipeline
+except Exception as e:
+    pipeline = None
+    print(f"Error loading model: {e}")
+
 from Deployment.TweetModel import Tweet
 import os
 
@@ -12,14 +19,15 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-try:
-    model_path = r'.\Deployment\Models\model_tfidf.pkl'
-    model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
-    latest_model_in = open(model_path, "rb")
-    latest_model = pickle.load(latest_model_in)
-except Exception as e:
-    print(f"Error loading model: {e}")
-    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to load the model")
+if type(pipeline) != type(None):
+    try:
+        model_path = r'.\Deployment\Models\model_tfidf.pkl'
+        model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
+        latest_model_in = open(model_path, "rb")
+        latest_model = pickle.load(latest_model_in)
+    except Exception as e:
+        print(f"Error loading model: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to load the model")
 
 
 
