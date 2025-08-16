@@ -12,10 +12,16 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# model_path = r'.\Deployment\Models\model_tfidf.pkl'
-# model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
-# latest_model_in = open(model_path, "rb")
-# latest_model = pickle.load(latest_model_in)
+try:
+    model_path = r'.\Deployment\Models\model_tfidf.pkl'
+    model_path = os.path.join('.', 'Deployment', 'Models', 'model_tfidf.pkl')
+    latest_model_in = open(model_path, "rb")
+    latest_model = pickle.load(latest_model_in)
+except Exception as e:
+    print(f"Error loading model: {e}")
+    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to load the model")
+
+
 
 
 @app.get("/", response_class=HTMLResponse)
