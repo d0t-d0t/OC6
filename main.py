@@ -5,12 +5,13 @@ from fastapi.templating import Jinja2Templates
 import uvicorn
 import pickle
 
-try:
-    from Training.TweetClassifier import TweetClassifierPipeline
-    pipeline = TweetClassifierPipeline
-except Exception as e:
-    pipeline = None
-    print(f"Error loading model: {e}")
+pipeline=None
+# try:
+#     from Training.TweetClassifier import TweetClassifierPipeline
+#     pipeline = TweetClassifierPipeline
+# except Exception as e:
+#     # pipeline = None
+#     print(f"Error loading model: {e}")
 
 from Deployment.TweetModel import Tweet
 import os
