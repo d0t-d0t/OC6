@@ -12,7 +12,7 @@ pydantic
 
 
 scikit-learn
-tensorflow # tensorflow-cpu
+tensorflow==1.14 # tensorflow-cpu
 keras
 mlflow
 protobuf==5.28.3
