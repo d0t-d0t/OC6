@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
 import pickle
-import tensorflow as tf
+# import tensorflow as tf
 
 pipeline=None
 # try:
