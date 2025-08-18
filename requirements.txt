@@ -12,7 +12,8 @@ pydantic
 
 
 scikit-learn
-tensorflow # tensorflow-cpu
+https://storage.googleapis.com/tensorflow/versions/2.19.0/tensorflow_cpu-2.19.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl; sys_platform == 'linux' and python_version == '3.12'
+# tensorflow # tensorflow-cpu # tensorflow=1.14
 keras
 mlflow
 protobuf==5.28.3
