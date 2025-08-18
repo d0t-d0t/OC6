@@ -4,15 +4,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
 import pickle
-import tensorflow as tf
+# import tensorflow as tf
 
 pipeline=None
-# try:
-#     from Training.TweetClassifier import TweetClassifierPipeline
-#     pipeline = TweetClassifierPipeline
-# except Exception as e:
-#     # pipeline = None
-#     print(f"Error loading model: {e}")
+try:
+    from Training.TweetClassifier import TweetClassifierPipeline
+    pipeline = TweetClassifierPipeline
+except Exception as e:
+    # pipeline = None
+    print(f"Error loading model: {e}")
 
 from Deployment.TweetModel import Tweet
 import os

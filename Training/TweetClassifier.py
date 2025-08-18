@@ -3,82 +3,82 @@ import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
-from keras.layers import TextVectorization
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras.models import Sequential # from tf_keras import Sequential
-from keras.layers import Dense, Embedding, Flatten, LSTM
-from keras.saving import register_keras_serializable
-import tensorflow as tf
+# from keras.layers import TextVectorization
+# from keras.callbacks import EarlyStopping, ModelCheckpoint
+# from keras.models import Sequential # from tf_keras import Sequential
+# from keras.layers import Dense, Embedding, Flatten, LSTM
+# from keras.saving import register_keras_serializable
+# import tensorflow as tf
 
 from .Preproc import tokenize_and_preprocess
 
-@register_keras_serializable()
-class KerasTweetClassifier(Sequential):
+# @register_keras_serializable()
+# class KerasTweetClassifier(Sequential):
 
-    def __init__(self, max_length=128,
-                    top_words = 10000,
-                    type = 'SIMPLE',
-                    vocabulary =  None,
-                    loss = 'categorical_crossentropy',
-                    optimizer='adam',
-                    metrics=['accuracy'],
-                    include_vectorizer = True,
-                    **kwarg,
-                    ):
-        super().__init__()
+#     def __init__(self, max_length=128,
+#                     top_words = 10000,
+#                     type = 'SIMPLE',
+#                     vocabulary =  None,
+#                     loss = 'categorical_crossentropy',
+#                     optimizer='adam',
+#                     metrics=['accuracy'],
+#                     include_vectorizer = True,
+#                     **kwarg,
+#                     ):
+#         super().__init__()
     
-        embedding_vector_length = 32
+#         embedding_vector_length = 32
 
-        if include_vectorizer:
-            self.add(TextVectorization(max_tokens=top_words,
-                                        standardize=None,
-                                        split='whitespace',
-                                        ngrams=None,
-                                        output_mode='int',
-                                        output_sequence_length = max_length,
-                                        vocabulary=vocabulary,
-                                        ))
+#         if include_vectorizer:
+#             self.add(TextVectorization(max_tokens=top_words,
+#                                         standardize=None,
+#                                         split='whitespace',
+#                                         ngrams=None,
+#                                         output_mode='int',
+#                                         output_sequence_length = max_length,
+#                                         vocabulary=vocabulary,
+#                                         ))
 
-        self.add(Embedding(top_words, embedding_vector_length, input_length=max_length))
+#         self.add(Embedding(top_words, embedding_vector_length, input_length=max_length))
         
-        match type:
-            case 'SIMPLE':
-                self.add(Flatten())
-                self.add(Dense(16, activation='relu'))
-                self.add(Dense(16, activation='relu'))
-                self.add(Dense(1, activation='sigmoid'))
-            case 'LTSM':
-                lstm_out = 200
-                self.add(LSTM(lstm_out, dropout_U = 0.2, dropout_W = 0.2))
-                self.add(Dense(2,activation='softmax'))
+#         match type:
+#             case 'SIMPLE':
+#                 self.add(Flatten())
+#                 self.add(Dense(16, activation='relu'))
+#                 self.add(Dense(16, activation='relu'))
+#                 self.add(Dense(1, activation='sigmoid'))
+#             case 'LTSM':
+#                 lstm_out = 200
+#                 self.add(LSTM(lstm_out, dropout_U = 0.2, dropout_W = 0.2))
+#                 self.add(Dense(2,activation='softmax'))
 
-        self.compile(loss=loss,optimizer=optimizer, metrics=metrics)
+#         self.compile(loss=loss,optimizer=optimizer, metrics=metrics)
     
-    def get_config(self):
-        config = super(KerasTweetClassifier, self).get_config()
-        base_config = {
-            'max_length': 128,
-            'top_words': 10000,
-            'type': 'SIMPLE',
-            'vocabulary': None,
-            'loss': 'categorical_crossentropy',
-            'optimizer': 'adam',
-            'metrics': ['accuracy'],
-            'include_vectorizer': True
-        }
-        return {**base_config, **config}
+#     def get_config(self):
+#         config = super(KerasTweetClassifier, self).get_config()
+#         base_config = {
+#             'max_length': 128,
+#             'top_words': 10000,
+#             'type': 'SIMPLE',
+#             'vocabulary': None,
+#             'loss': 'categorical_crossentropy',
+#             'optimizer': 'adam',
+#             'metrics': ['accuracy'],
+#             'include_vectorizer': True
+#         }
+#         return {**base_config, **config}
 
-    @classmethod
-    def from_config(cls, config):
-        return cls( **config)
+#     @classmethod
+#     def from_config(cls, config):
+#         return cls( **config)
 
 
-    # def set_vocabulary(self, texts):
-    #     if self.include_vectorizer:
-    #         self.layers[0].adapt(texts)
+#     # def set_vocabulary(self, texts):
+#     #     if self.include_vectorizer:
+#     #         self.layers[0].adapt(texts)
 
-    # def get_config(self):
-    #     return {"factor": self.factor}
+#     # def get_config(self):
+#     #     return {"factor": self.factor}
 
 
 class TweetClassifierPipeline(mlflow.pyfunc.PythonModel,
@@ -123,7 +123,9 @@ class TweetClassifierPipeline(mlflow.pyfunc.PythonModel,
 
         match self.model_lib:
             case "KERAS":
-                # import tensorflow as tf
+                import tensorflow as tf
+                from keras.callbacks import EarlyStopping, ModelCheckpoint
+
                 if not self.model_params.get('vocabulary'):
                     '''Need to adapt vector layer vocabulary too'''
                     tokenized,word_frequ_df = self.preproc_func(X,                              
@@ -224,7 +226,7 @@ class TweetClassifierPipeline(mlflow.pyfunc.PythonModel,
             X = self.vectorize_transform(X)
         
         if self.model_lib == 'KERAS':
-            # import tensorflow as tf
+            import tensorflow as tf
             X = tf.constant(X)
 
         prediction = self.model_.predict(X)
