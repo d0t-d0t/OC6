@@ -33,6 +33,8 @@ jobs:
         run: pip install -r requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      - name: Run unit tests
+        run: python test_unitest.py
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
@@ -58,4 +60,5 @@ jobs:
         with:
           app-name: 'mini-message-mood-analyzer'
           slot-name: 'Production'
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F7BCA6951B144E6DB11B17197DD4D465 }}
