@@ -1,7 +1,7 @@
 fastapi
 gunicorn
 uvicorn
-jinja2
+# jinja2
 python-multipart
 
 # Flask

@@ -11,15 +11,15 @@ try:
     from Training.TweetClassifier import TweetClassifierPipeline
     pipeline = TweetClassifierPipeline
 except Exception as e:
-    # pipeline = None
     print(f"Error loading model: {e}")
 
 from Deployment.TweetModel import Tweet
 import os
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+# templates = Jinja2Templates(directory="templates")
+
 
 if type(pipeline) != type(None):
     try:
@@ -32,51 +32,53 @@ if type(pipeline) != type(None):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to load the model")
 
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    print('Request for index page received')
-    return templates.TemplateResponse('index.html', {"request": request})
+# @app.get("/", response_class=HTMLResponse)
+# async def index(request: Request):
+#     print('Request for index page received')
+#     return templates.TemplateResponse('index.html', {"request": request})
 
-@app.get('/favicon.ico')
-async def favicon():
-    file_name = 'favicon.ico'
-    file_path = './static/' + file_name
-    return FileResponse(path=file_path, headers={'mimetype': 'image/vnd.microsoft.icon'})
+# @app.get('/favicon.ico')
+# async def favicon():
+#     file_name = 'favicon.ico'
+#     file_path = './static/' + file_name
+#     return FileResponse(path=file_path, headers={'mimetype': 'image/vnd.microsoft.icon'})
 
-@app.post('/hello', response_class=HTMLResponse)
-async def hello(request: Request, name: str = Form(...)):
-    if name:
-        print('Request for hello page received with name=%s' % name)
-        return templates.TemplateResponse('hello.html', {"request": request, 'name':name})
-    else:
-        print('Request for hello page received with no name or blank name -- redirecting')
-        return RedirectResponse(request.url_for("index"), status_code=status.HTTP_302_FOUND)
-
-
-# @app.post("/predict/")
-# def get_prediction(tweet: Tweet):
-#     # tweet = Tweet(tweet_dic)
-#     predictions = []
-#     probabilities = []
+# @app.post('/hello', response_class=HTMLResponse)
+# async def hello(request: Request, name: str = Form(...)):
+#     if name:
+#         print('Request for hello page received with name=%s' % name)
+#         return templates.TemplateResponse('hello.html', {"request": request, 'name':name})
+#     else:
+#         print('Request for hello page received with no name or blank name -- redirecting')
+#         return RedirectResponse(request.url_for("index"), status_code=status.HTTP_302_FOUND)
 
 
-#     prediction = latest_model.predict(tweet.text)
-#     try:
-#         probability = latest_model.predict_proba(tweet.text)
-#         if probability.shape[1] == 2:
-#             probability = probability[:, 1]
-#     except:
-#         probability = None
+@app.post("/predict/")
+def get_prediction(tweet: Tweet):
+    # tweet = Tweet(tweet_dic)
+    predictions = []
+    probabilities = []
 
 
+    prediction = latest_model.predict(tweet.text)
+    try:
+        probability = latest_model.predict_proba(tweet.text)
+        if probability.shape[1] == 2:
+            probability = probability[:, 1]
+    except:
+        probability = None
+
+    return {
+        "prediction": int(prediction[0]),
+        "probabilitie": float(probability[0]),
+    }
 
 
-#     return {
-#         "prediction": int(prediction[0]),
-#         "probabilitie": float(probability[0]),
-#     }
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host='0.0.0.0', port=8000)
