@@ -4,12 +4,13 @@ from collections import Counter
 # import matplotlib.pyplot as plt
 import nltk
 import pandas as pd
-from nltk.corpus import stopwords
+
 # import tensorflow as tf
 # nltk english lemmatization
 from nltk.stem import WordNetLemmatizer
 nltk.download('wordnet')
 nltk.download('stopwords')
+from nltk.corpus import stopwords
 
 # def observ_token(df, 
 #                  token_column='tokenised_desc'
@@ -87,8 +88,13 @@ def format_text(df, text_column):
 
     
 def remove_words_from_tokens(df,token_column,
-                    stop_words = stopwords.words('english')
+                    stop_words = None,
+                    language = 'english'
                     ):
+    
+    if type(stop_words) == type(None):
+        stop_words = stopwords.words(language)
+
         
     def filter_row(token_list):
         filtered_list= []

@@ -1,7 +1,5 @@
 from fastapi import FastAPI, HTTPException, Form, Request, status
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 import uvicorn
 import pickle
 # import tensorflow as tf
@@ -13,13 +11,10 @@ try:
 except Exception as e:
     print(f"Error loading model: {e}")
 
-from Deployment.TweetModel import Tweet
+from Deployment.TweetModel import Tweet, Feedback
 import os
 
 app = FastAPI()
-# app.mount("/static", StaticFiles(directory="static"), name="static")
-# templates = Jinja2Templates(directory="templates")
-
 
 if type(pipeline) != type(None):
     try:
@@ -35,28 +30,6 @@ if type(pipeline) != type(None):
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
-
-
-# @app.get("/", response_class=HTMLResponse)
-# async def index(request: Request):
-#     print('Request for index page received')
-#     return templates.TemplateResponse('index.html', {"request": request})
-
-# @app.get('/favicon.ico')
-# async def favicon():
-#     file_name = 'favicon.ico'
-#     file_path = './static/' + file_name
-#     return FileResponse(path=file_path, headers={'mimetype': 'image/vnd.microsoft.icon'})
-
-# @app.post('/hello', response_class=HTMLResponse)
-# async def hello(request: Request, name: str = Form(...)):
-#     if name:
-#         print('Request for hello page received with name=%s' % name)
-#         return templates.TemplateResponse('hello.html', {"request": request, 'name':name})
-#     else:
-#         print('Request for hello page received with no name or blank name -- redirecting')
-#         return RedirectResponse(request.url_for("index"), status_code=status.HTTP_302_FOUND)
-
 
 @app.post("/predict/")
 def get_prediction(tweet: Tweet):
@@ -78,7 +51,17 @@ def get_prediction(tweet: Tweet):
         "probabilitie": float(probability[0]),
     }
 
+@app.post("/user_feedback/")
+def get_user_feedback(tweet: Tweet, feedback :  Feedback):
 
+    # Placeholder function to save feedback to database
+    def save_feedback_to_database(tweet, feedback):
+        pass
+
+    
+    save_feedback_to_database(tweet, feedback)
+
+    return {"message": "Feedback received and saved successfully"}
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host='0.0.0.0', port=8000)
