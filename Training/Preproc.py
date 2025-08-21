@@ -82,8 +82,10 @@ def regex_tokenize_df_text(df, text_column,
 def format_text(df, text_column):
     """Format the text column in a DataFrame by converting to lowercase."""
     def format_row(row):
-        format_row = [w.lower() for w in row]
-        return format_row
+        if isinstance(row, str):  
+            return row.lower()     
+        else:                     # Assume it's a list of tokens then
+            return [w.lower() for w in row]   
     df[text_column] = df[text_column].apply(format_row)
 
     
