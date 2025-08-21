@@ -31,25 +31,33 @@ def merge_results(current_df,result_df):
             on='llm_tweet')
     
 
-def classify_in_batches(df, batch_size=1000):
-    file_name = 'llm_reclassified_data.csv'
+def classify_in_batches(base_df, 
+                        batch_size=1000,
+                        file_name = 'llm_reclassified_data.csv'):
+    
+    try:
+        df = pd.read_csv(file_name)
+    except:
+        df = base_df.copy()
+        df['llm_target'] = None
 
-    remaining_df = df.loc[df['llm_target'].isna()]
+    remaining_df = df[df['llm_target'].isna()]
     while len(remaining_df)>0:
 
         current_batch = remaining_df.sample(batch_size)
 
         print(f'On {len(remaining_df)} remaining tweet, batching {batch_size}')
 
-        current_batch['llm_target'] = current_batch['llm_tweet'].apply(classify_tweet)
+        df.loc[current_batch.index, 
+                'llm_target'] = current_batch['llm_tweet'].apply(classify_tweet)
 
-        merge_results(df,current_batch)
-        remaining_df = df.loc[df['llm_target'].isna()]
+        remaining_df = df[df['llm_target'].isna()]
 
         df.to_csv(file_name, mode='w', index=False)
 
 
 if __name__ == "__main__":
+    df = pd.read_csv(r'Training\Data\cleaned_dataset.csv')
     tokenize_and_preprocess(df, 'tweet', 
                             cible='llm_tweet',
                             actions=[
@@ -57,12 +65,9 @@ if __name__ == "__main__":
                                     'REPLACE_URLS',
                                     'FORMAT'
                                     ])
-    try:
-        try:
-            existing_df = pd.read_csv('llm_reclassified_data.csv')
-        except:
-            existing_df = df.copy()
-
-        classify_in_batches(existing_df)
+    try:      
+        classify_in_batches(df,
+                            file_name = r'Training\Data\llm_reclassified_data.csv'
+                            )
     except KeyboardInterrupt:
         print("Process interrupted by user.")
