@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Form, Request, status
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 import uvicorn
 import pickle
-# import tensorflow as tf
+import tensorflow as tf
 
 pipeline=None
 try:
